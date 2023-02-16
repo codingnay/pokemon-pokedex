@@ -11,28 +11,35 @@
     <title>Pokedex v.4</title>
 </head>
 <body>
-    
-    <div class="col-3">
-        <div id="busca">
+
+    <div id="busca" class="col-1">
+        <div class="col-3">
             <form id="form">
-                <input type="text" name="busca" id="input-busca" placeholder="digite o nome do Pokemon"/>
+                <input type="text" name="busca" id="input-busca" placeholder="digite o nome do Pokemon" autocomplete="off"/>
                 <button type="submit">Ok</button>
             </form>
         </div>
-
-        <div id="filtros">
             
-            <label for="geracao">Geração:</label>
-            <select name="geracao" id="geracao">
-                <option value="limit=151" selected>1ª Geração</option>
-                <option value="offset=151&limit=100">2ª Geração</option>
-                <option value="offset=251&limit=135">3ª Geração</option>
-                <option value="offset=386&limit=107">4ª Geração</option>
-                <option value="offset=493&limit=156">5ª Geração</option>
-                <option value="offset=649&limit=72">6ª Geração</option>
-                <option value="offset=721&limit=89">7ª Geração</option>
-                <option value="offset=809&limit=81">8ª Geração</option>
-            </select>
+    </div>
+    
+    <div class="col-3">
+        
+
+        <div id="filtros" class="col-1">
+            
+            <div>
+                <label for="geracao">Geração:</label>
+                <select name="geracao" id="geracao">
+                    <option value="limit=151" selected>1ª Geração</option>
+                    <option value="offset=151&limit=100">2ª Geração</option>
+                    <option value="offset=251&limit=135">3ª Geração</option>
+                    <option value="offset=386&limit=107">4ª Geração</option>
+                    <option value="offset=493&limit=156">5ª Geração</option>
+                    <option value="offset=649&limit=72">6ª Geração</option>
+                    <option value="offset=721&limit=89">7ª Geração</option>
+                    <option value="offset=809&limit=81">8ª Geração</option>
+                </select>
+            </div>
 
             <label for="tipos">Tipos:</label>
             <select name="tipos" id="tipos">

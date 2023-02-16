@@ -45,7 +45,7 @@ const whatsColor = (color) => {
             cor = '#F87C7A'
         } else if (color == 'rock') {
             cor = '#CEC18C'
-        } else if (color == 'stell') {
+        } else if (color == 'steel') {
             cor = '#5596A4'
         } else if (color == 'water') {
             cor = '#559EDF'
@@ -73,7 +73,8 @@ const displayAllPokemonData = async (url) => {
     
     pokemonList.forEach(async pokemon => {
         const pokemonData = await fetch(pokemon.url).then(res => res.json());
-      
+        // função para exibir o tipo do pokemon
+      // colocar uma condicional aqui, se o tipo é aquele, e criar a div só se for
         const pokemonElement = document.createElement("div");
         pokemonElement.classList.add("pokemon-flex");
         pokemonElement.classList.add("col-2");
@@ -152,13 +153,14 @@ const clearPokemon = () => {
 // eventos
 document.querySelector('#form').addEventListener('submit', (event) => {
     event.preventDefault();
-    const busca = document.querySelector('#input-busca').value.toLowerCase();
+    let busca = document.querySelector('#input-busca').value.toLowerCase();
     clearPokemon();    
 
     if (busca == 0) {
         displayAllPokemonData('https://pokeapi.co/api/v2/pokemon?limit=151') 
     } else if (busca != 0) {
         getPokemonInfo(busca);
+        document.querySelector('#input-busca').value = ' ';
     } 
 });
 
