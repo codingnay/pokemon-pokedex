@@ -6,7 +6,7 @@ const getAllPokemonData = async (url) => {
         return data.results;
   
       } catch (error) {
-        deuMerda(error);
+        deuMerda('api-off');
       }
     }
 
@@ -54,15 +54,28 @@ const whatsColor = (color) => {
 }  
 
 // função de erro
-const deuMerda = (error) => {
-    console.log(error);
+const deuMerda = (erro, nome) => {
+    console.log(erro)
+
     const pokemonContainer = document.querySelector("#pokemon-container");
     const mensagemErro = document.createElement('div');
     mensagemErro.classList.add('pokemon-flex');
-    pokemonContainer.appendChild(mensagemErro);
-    mensagemErro.innerHTML = `
-        <h3>Não achei nada aqui</h3>
-    `;
+    if (erro == 'busca-vazia') {
+        document.querySelector('#form').style.border = 'solid 1px red';
+        alert('Digite algo para fazer a busca!');
+        
+    } else if (erro == 'api-off') {
+        pokemonContainer.appendChild(mensagemErro);
+        mensagemErro.innerHTML = `
+            <h3>Estamos com problemas de conexão no momento. Tente novamente mais tarde!</h3>
+        `;
+
+    } else if (erro == 'pokemon-invalido') {
+        pokemonContainer.appendChild(mensagemErro);
+        mensagemErro.innerHTML = `
+            <h3>Não encontramos por ${nome}.</h3>
+        `;
+    }
 }
 
 // busca todos os pokemons
@@ -112,7 +125,7 @@ const getPokemonInfo = async (pokemonName) => {
 
     const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
         .then(res => res.json())
-        .catch(error => {deuMerda(error)});
+        .catch(erro => {deuMerda(`pokemon-invalido`, pokemonName)});
   
     let [tipo1, tipo2] = pokemon.types.map(type => type.type.name);
 
@@ -143,38 +156,96 @@ const getPokemonInfo = async (pokemonName) => {
     `;
 
     pokemonContainer.appendChild(pokemonElement);
-  }
+}
 
 const clearPokemon = () => {
     const pokemonElement = document.querySelectorAll('.pokemon-flex');
     pokemonElement.forEach(div => div.parentNode.removeChild(div));
 }
 
+// busca todos os pokemons pelo tipo
+const displayAllPokemonType = async (tipo) => {
+
+    const pokemonList = await getAllPokemonData('https://pokeapi.co/api/v2/pokemon?limit=890');
+    const pokemonContainer = document.getElementById("pokemon-container");
+    
+    pokemonList.forEach(async pokemon => {
+        const pokemonData = await fetch(pokemon.url).then(res => res.json());
+        let [tipo1, tipo2] = pokemonData.types.map(type => type.type.name);
+        
+        if ((tipo == tipo1) || (tipo == tipo2)) {
+            const pokemonElement = document.createElement("div");
+            pokemonElement.classList.add("pokemon-flex");
+            pokemonElement.classList.add("col-2");
+
+            let color = tipo1;
+
+            tipo1= `<span class="tp">${tipo1}</span>`;
+
+            if (tipo2 == undefined) {
+                tipo2 = ''} else {
+                    tipo2= `<span class="tp">${tipo2}</span>`;
+                }
+
+            pokemonElement.innerHTML = `
+                <div class="pokemon-card" style="background-color:${whatsColor(color)}" onClick="getPokemonInfo('${pokemon.name}');
+                ">
+                    <p class="pokemon-number">${pokemonData.id}</p>
+                    <div class="pokemon-infos">
+                        <a class="${pokemon.name} pokemon-name">${pokemon.name}</a>
+                        <p class="pokemon-types">${tipo1}</p>
+                        <p class="pokemon-types">${tipo2}</p>
+                    </div>           
+                    <img class="pokemon-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonData.id}.png"/>                
+                </div>   
+                `
+            pokemonContainer.appendChild(pokemonElement);
+        }
+    });
+}
+
 // eventos
 document.querySelector('#form').addEventListener('submit', (event) => {
     event.preventDefault();
+    document.querySelector('#form').style.border = 0;
     let busca = document.querySelector('#input-busca').value.toLowerCase();
-    clearPokemon();    
-
-    if (busca == 0) {
-        displayAllPokemonData('https://pokeapi.co/api/v2/pokemon?limit=151') 
-    } else if (busca != 0) {
+    document.querySelector('#tipos').value = 'all';
+    document.querySelector('#geracao').value = 'all';
+    console.log(busca);
+    if (busca == '') {
+        deuMerda('busca-vazia');
+    } else if (busca != '') {
+        clearPokemon();  
         getPokemonInfo(busca);
-        document.querySelector('#input-busca').value = ' ';
+        document.querySelector('#input-busca').value = '';
     } 
 });
 
 document.querySelector('#geracao').addEventListener('change', () => {
+    document.querySelector('#form').style.border = 0;
     let geracao = document.querySelector('#geracao').value;
     clearPokemon();
-    displayAllPokemonData(`https://pokeapi.co/api/v2/pokemon?${geracao}`);
+    if (geracao == 'all') {
+        displayAllPokemonData(`https://pokeapi.co/api/v2/pokemon?limit=890`);
+    } 
+    else {
+        displayAllPokemonData(`https://pokeapi.co/api/v2/pokemon?${geracao}`);
+    }
+    document.querySelector('#input-busca').value = '';
+    document.querySelector('#tipos').value = 'all';
 });
 
 document.querySelector('#tipos').addEventListener('change', () => {
+    document.querySelector('#form').style.border = 0;
     let tipo = document.querySelector('#tipos').value;
     clearPokemon();
-    displayAllPokemonData(`https://pokeapi.co/api/v2/pokemon?type=${tipo}`);
+    if (tipo == 'all') {
+        displayAllPokemonData(`https://pokeapi.co/api/v2/pokemon?limit=890`);
+    } else {
+        displayAllPokemonType(tipo);
+    }
+    document.querySelector('#geracao').value = 'all';
+    document.querySelector('#input-busca').value = '';
 });
-
 
 displayAllPokemonData('https://pokeapi.co/api/v2/pokemon?limit=151');

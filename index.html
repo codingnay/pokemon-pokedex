@@ -15,7 +15,7 @@
     <div id="busca" class="col-1">
         <div class="col-3">
             <form id="form">
-                <input type="text" name="busca" id="input-busca" placeholder="digite o nome do Pokemon" autocomplete="off"/>
+                <input type="text" name="busca" id="input-busca" autocomplete="off"/>
                 <button type="submit">Ok</button>
             </form>
         </div>
@@ -24,13 +24,16 @@
     
     <div class="col-3">
         
-
         <div id="filtros" class="col-1">
             
-            <div>
-                <label for="geracao">Geração:</label>
+            <div class="geracao">
                 <select name="geracao" id="geracao">
-                    <option value="limit=151" selected>1ª Geração</option>
+                    <option value="all">Geração</option>
+                    <option value="limit=151">
+                     
+                            1ª Geração
+                        
+                    </option>
                     <option value="offset=151&limit=100">2ª Geração</option>
                     <option value="offset=251&limit=135">3ª Geração</option>
                     <option value="offset=386&limit=107">4ª Geração</option>
@@ -38,16 +41,35 @@
                     <option value="offset=649&limit=72">6ª Geração</option>
                     <option value="offset=721&limit=89">7ª Geração</option>
                     <option value="offset=809&limit=81">8ª Geração</option>
+                    <option value="all">Todas</option>
                 </select>
             </div>
 
-            <label for="tipos">Tipos:</label>
-            <select name="tipos" id="tipos">
-                <option value="all">Todos</option>
-                <option value="grass">Grass</option>
-                <option value="poison">Poison</option>
-                <option value="bug">Bug</option>
-            </select>
+            <div class="tipos">
+                <select name="tipos" id="tipos">
+                    <option value="all">Tipos</option>
+                    <option value="grass">
+                        Grass
+                    </option>
+                    <option value="fire">Fire</option>
+                    <option value="water">Water</option>
+                    <option value="poison">Poison</option>
+                    <option value="fairy">Fairy</option>
+                    <option value="ghost">Ghost</option>
+                    <option value="steel">Steel</option>
+                    <option value="dark">Dark</option>
+                    <option value="ice">Ice</option>
+                    <option value="normal">Normal</option>
+                    <option value="flying">Flying</option>
+                    <option value="electric">Electric</option>
+                    <option value="ground">Ground</option>
+                    <option value="psychic">Psychic</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="bug">Bug</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="all">Todos</option>
+                </select>
+            </div>
             
         </div>
 
